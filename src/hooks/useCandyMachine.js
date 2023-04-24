@@ -1,25 +1,16 @@
 import React from "react";
-import { Program, AnchorProvider, web3, BN } from "@project-serum/anchor";
+import { web3, BN } from "@project-serum/anchor";
 import { PublicKey, Connection } from "@solana/web3.js";
-import { TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
-import { Buffer } from "buffer";
 import toast from "react-hot-toast";
 
 import {
-  CANDY_MACHINE_PROGRAM,
-  TOKEN_METADATA_PROGRAM_ID,
-  SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
   getAtaForMint,
-  getNetworkExpire,
-  getNetworkToken,
   getCollectionPDA,
-  CIVIC,
   getCandyMachineState,
   createAccountsForMint,
   mint as mintNFT,
   awaitTransactionSignatureConfirmation,
 } from "../utils/helpers";
-import { sendTransactions } from "../utils/connection";
 
 export default function useCandyMachine(connection, userWallet) {
   const [candyMachineState, setCandyMachineState] = React.useState(null);
@@ -32,20 +23,14 @@ export default function useCandyMachine(connection, userWallet) {
   const [isMinting, setIsMinting] = React.useState(false);
   const [needTxnSplit, setNeedTxnSplit] = React.useState(true);
   const [setupTxn, setSetupTxn] = React.useState(null);
-  let toastId;
+  const toastIdRef = React.useRef(null);
 
   React.useEffect(() => {
     if (userWallet) {
-      toastId = toast.loading("Getting things ready...");
+      toastIdRef.current = toast.loading("Getting things ready...");
       fetchCandyMachine(userWallet);
     }
   }, [userWallet]);
-
-  const getProvider = () => {
-    const provider = new AnchorProvider(connection, window.solana);
-
-    return provider;
-  };
 
   const fetchCandyMachine = async (
     userWalletPubKey,
@@ -121,9 +106,9 @@ export default function useCandyMachine(connection, userWallet) {
     setItemsRedeemed(candyMachine.state.itemsRedeemed);
     setItemsRemaining(candyMachine.state.itemsRemaining);
 
-    toastId &&
+    toastIdRef.current &&
       setTimeout(() => {
-        toast.dismiss(toastId);
+        toast.dismiss(toastIdRef.current);
       }, 2000);
   };
 

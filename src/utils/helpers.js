@@ -5,11 +5,8 @@ import { Buffer } from "buffer";
 
 import {
   SystemProgram,
-  Transaction,
   SYSVAR_SLOT_HASHES_PUBKEY,
   LAMPORTS_PER_SOL,
-  SYSVAR_RENT_PUBKEY,
-  TransactionInstruction,
 } from "@solana/web3.js";
 
 import { sendTransactions } from "./connection";
@@ -208,7 +205,7 @@ async function getCandyMachineState(wallet, candyMachineId, connection) {
   const itemsRedeemed = state.itemsRedeemed.toNumber();
   const itemsRemaining = itemsAvailable - itemsRedeemed;
   const timeDiff = new Date().getTime() / 1000 - currentBlockTime;
-  const goLiveDate =
+  const goLiveDateLocal =
     state.data.goLiveDate !== null ? state.data.goLiveDate + timeDiff : null;
 
   return {
@@ -224,6 +221,7 @@ async function getCandyMachineState(wallet, candyMachineId, connection) {
       isPresale: false,
       isWhitelistOnly: false,
       goLiveDate: state.data.goLiveDate,
+      goLiveDateLocal,
       treasury: state.wallet,
       tokenMint: state.tokenMint,
       gatekeeper: state.data.gatekeeper,

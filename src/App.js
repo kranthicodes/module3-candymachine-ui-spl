@@ -34,7 +34,7 @@ function App() {
 
   React.useEffect(() => {
     refreshTokenBalance();
-  }, [itemsRedeemed]);
+  }, [itemsRedeemed, refreshTokenBalance]);
 
   return (
     <div className="bg-[#1C1C1C] flex flex-col h-screen">
