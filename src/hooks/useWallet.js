@@ -77,6 +77,14 @@ export default function useWallet(connection) {
     // return balance;
   };
 
+  const refreshTokenBalance = async () => {
+    if (!walletAddress || !walletExists) {
+      return;
+    }
+
+    await getTokenBalance(new PublicKey(walletAddress));
+  };
+
   const disconnectWallet = async () => {
     setWalletAddress(null);
   };
@@ -90,5 +98,6 @@ export default function useWallet(connection) {
     disconnectWallet,
     getBalance,
     getTokenBalance,
+    refreshTokenBalance,
   };
 }

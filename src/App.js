@@ -18,6 +18,7 @@ function App() {
     walletExists,
     tokenBalance,
     connectWallet,
+    refreshTokenBalance,
   } = useWallet(connection);
 
   const {
@@ -30,6 +31,10 @@ function App() {
     candyMachine,
     mintToken,
   } = useCandyMachine(connection, walletAddress);
+
+  React.useEffect(() => {
+    refreshTokenBalance();
+  }, [itemsRedeemed]);
 
   return (
     <div className="bg-[#1C1C1C] flex flex-col h-screen">
@@ -51,15 +56,15 @@ function App() {
               <p className="text-xl">{itemsAvailable}</p>
             </div>
             <div className="flex flex-row justify-between">
-              <p className="text-xl">Items Available</p>
-              <p className="text-xl">
-                {itemsRemaining}/{itemsAvailable}
-              </p>
-            </div>
-            <div className="flex flex-row justify-between">
               <p className="text-xl">Items Redeemed</p>
               <p className="text-xl">
                 {itemsRedeemed}/{itemsAvailable}
+              </p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="text-xl">Items Remaining</p>
+              <p className="text-xl">
+                {itemsRemaining}/{itemsAvailable}
               </p>
             </div>
           </div>
